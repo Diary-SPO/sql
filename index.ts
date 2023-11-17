@@ -1,37 +1,7 @@
 import { QueryBuilder } from './src/types'
-import { buildValuesString, decrypt } from './src/utils'
-
-/**
- * Выполняет SQL-запрос с использованием предоставленного клиента.
- * @param query - SQL-запрос для выполнения.
- * @param client - Клиент базы данных.
- * @returns Промис, разрешающийся к строкам результата.
- */
-async function executeQuery<T>(query: string, client: any): Promise<T[]> {
-  try {
-    console.log(query)
-    const result = await client.query(query)
-    return result.rows
-  } catch (e) {
-    console.error('Ошибка выполнения запроса: ', e)
-    throw e
-  }
-}
+import { buildValuesString, executeQuery } from './src/utils'
 
 // TODO: ADD ENCRYPT_KEY
-
-/**
- * Расшифровывает зашифрованные данные с использованием предоставленного ключа шифрования.
- * @param data - Данные для расшифровки.
- * @param ENCRYPT_KEY - Ключ шифрования.
- * @returns Расшифрованные данные.
- */
-export const decryptData = (
-  data: string | null,
-  ENCRYPT_KEY: string,
-): string => {
-  return decrypt(data ?? '', ENCRYPT_KEY)
-}
 
 /**
  * Создает объект для построения и выполнения SQL-запросов.
