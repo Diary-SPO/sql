@@ -5,7 +5,10 @@
  * @returns Промис, разрешающийся к строкам результата.
  */
 
-export const executeQuery = async <T>(query: string, client: any): Promise<T[]> => {
+export const executeQuery = async <T>(
+  query: string,
+  client: any,
+): Promise<T[]> => {
   try {
     console.log(query)
     const result = await client.query(query)

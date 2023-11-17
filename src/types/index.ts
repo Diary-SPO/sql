@@ -1,3 +1,5 @@
+import { type Headers } from 'node-fetch'
+
 /**
  * Интерфейс для построения и выполнения SQL-запросов.
  * @typeparam T - Тип ожидаемого результата запроса.
@@ -65,4 +67,12 @@ export interface QueryBuilder<T> {
    * @returns
    */
   customQueryRun: (sql: string) => Promise<T | null>
+}
+
+export type HTTPMethods = 'GET' | 'POST'
+
+export interface ApiResponse<T> {
+  data: T
+  headers: Headers
+  status: number
 }
