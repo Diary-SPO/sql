@@ -7,7 +7,7 @@ import { buildValuesString, executeQuery } from './src/utils'
  * @returns
  */
 
-export function createQueryBuilder<T>(client: any): QueryBuilder<T> {
+const createQueryBuilder = <T>(client: any): QueryBuilder<T> => {
   return {
     table: '',
     columns: ['*'],
@@ -93,3 +93,5 @@ export function createQueryBuilder<T>(client: any): QueryBuilder<T> {
     },
   }
 }
+
+export default createQueryBuilder
