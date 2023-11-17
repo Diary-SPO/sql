@@ -1,13 +1,12 @@
 import { QueryBuilder } from './src/types'
 import { buildValuesString, executeQuery } from './src/utils'
 
-// TODO: ADD ENCRYPT_KEY
-
 /**
  * Создает объект для построения и выполнения SQL-запросов.
  * @param client - Клиент базы данных.
  * @returns
  */
+
 export function createQueryBuilder<T>(client: any): QueryBuilder<T> {
   return {
     table: '',
@@ -44,6 +43,7 @@ export function createQueryBuilder<T>(client: any): QueryBuilder<T> {
         this.table
       }" WHERE ${this.conditions} LIMIT 1`
       const result = await executeQuery<T>(query, client)
+
       return result || null
     },
 
@@ -55,6 +55,7 @@ export function createQueryBuilder<T>(client: any): QueryBuilder<T> {
     async buildInsertQuery(data: Partial<T>): Promise<string> {
       const columns = Object.keys(data).join(', ')
       const values = buildValuesString(data)
+
       return `INSERT INTO ${this.table} (${columns}) VALUES (${values})`
     },
 
@@ -62,6 +63,7 @@ export function createQueryBuilder<T>(client: any): QueryBuilder<T> {
       const columns = `"${Object.keys(data).join('", "')}"`
       const values = buildValuesString(data)
       const query = `INSERT INTO "${this.table}" (${columns}) VALUES (${values}) RETURNING *`
+
       return (await executeQuery<T>(query, client))[0] ?? null
     },
 
