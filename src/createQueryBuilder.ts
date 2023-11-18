@@ -30,11 +30,12 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
     },
 
     async first(): Promise<T | null> {
-      const query = `SELECT ${this.columns.join(', ')} FROM "${
-        this.table
-      }" WHERE ${this.conditions} LIMIT 1`
+      const query = {
+        text: `SELECT ${this.columns.join(', ')} FROM $1 WHERE $2 LIMIT 1`,
+        values: [this.table, this.conditions],
+      }
 
-      const result = await executeQuery<T>(query, client)
+      const result = await executeQuery<T>(query.text, query.values, client)
 
       if (!result || result.length === 0) {
         return null
@@ -44,19 +45,23 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
     },
 
     async all(): Promise<T[] | null> {
-      const query = `SELECT ${this.columns.join(', ')} FROM "${
-        this.table
-      }" WHERE ${this.conditions} LIMIT 1`
+      const query = {
+        text: `SELECT ${this.columns.join(', ')} FROM $1 WHERE $2`,
+        values: [this.table, this.conditions],
+      }
 
-      const result = await executeQuery<T>(query, client)
+      const result = await executeQuery<T>(query.text, query.values, client)
 
       return result ?? null
     },
 
     async delete(): Promise<void> {
-      const query = `DELETE FROM "${this.table}" WHERE ${this.conditions}`
+      const query = {
+        text: `DELETE FROM $1 WHERE $2`,
+        values: [this.table, this.conditions],
+      }
 
-      await executeQuery(query, client)
+      await executeQuery(query.text, query.values, client)
     },
 
     async buildInsertQuery(data: Partial<T>): Promise<string> {
@@ -67,36 +72,46 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
     },
 
     async insert(data: Partial<T>): Promise<T | null> {
-      const columns = `"${Object.keys(data).join('", "')}"`
+      const columns = Object.keys(data)
+        .map((col) => `"${col}"`)
+        .join(', ')
       const values = buildValuesString(data)
-      const query = `INSERT INTO "${this.table}" (${columns}) VALUES (${values}) RETURNING *`
+      const query = {
+        text: `INSERT INTO $1 (${columns}) VALUES (${values}) RETURNING *`,
+        values: [this.table],
+      }
 
-      return (await executeQuery<T>(query, client))[0] ?? null
+      return (
+        (await executeQuery<T>(query.text, query.values, client))[0] ?? null
+      )
     },
 
     async buildUpdateQuery(data: Partial<T>): Promise<string> {
       const updateValues = Object.entries(data)
         .map(([column, value]) => {
           if (typeof value === 'string') {
-            return `"${column}" = '${value}'`
+            return `"${column}" = $1`
           }
 
-          return `"${String(column)}" = ${String(value)}`
+          return `"${String(column)}" = $1`
         })
         .join(', ')
 
-      return `UPDATE "${this.table}" SET ${updateValues} WHERE ${this.conditions} RETURNING *`
+      return `UPDATE ${this.table} SET ${updateValues} WHERE ${this.conditions} RETURNING *`
     },
 
     async update(data: Partial<T>): Promise<T | null> {
-      return (
-        (await executeQuery<T>(await this.buildUpdateQuery(data), client))[0] ??
-        null
-      )
+      const query = await this.buildUpdateQuery(data)
+      const result = await executeQuery<T>(query, [], client)
+
+      return result[0] ?? null
     },
 
+    // TODO: сделать безопаснее
     async customQueryRun(sql: string): Promise<T | null> {
-      return (await executeQuery<T>(sql, client))[0] ?? null
+      const result = await executeQuery<T>(sql, [], client)
+
+      return result[0] ?? null
     },
   }
 }
