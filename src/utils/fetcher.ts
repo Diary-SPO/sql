@@ -9,12 +9,12 @@ interface Params {
   cookie?: string
 }
 
-export default async function <T>({
+export const fetcher = async <T>({
   url,
   method = 'GET',
   body,
-  cookie = '',
-}: Params): Promise<ApiResponse<T> | number> {
+  cookie,
+}: Params): Promise<ApiResponse<T> | number> => {
   try {
     const response = await fetch(url, {
       method,
