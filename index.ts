@@ -5,4 +5,5 @@ import { encrypt, decrypt } from './src/crypto'
 
 export { fetcher, decrypt, encrypt }
 export type { QueryBuilder, HTTPMethods, ApiResponse }
+
 export default createQueryBuilder
