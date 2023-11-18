@@ -1,3 +1,5 @@
+import { Client } from 'pg'
+
 /**
  * Выполняет SQL-запрос с использованием предоставленного клиента.
  * @param query - SQL-запрос для выполнения.
@@ -7,7 +9,7 @@
 
 export const executeQuery = async <T>(
   query: string,
-  client: any,
+  client: Client,
 ): Promise<T[]> => {
   try {
     console.log(query)
