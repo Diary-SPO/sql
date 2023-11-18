@@ -1,6 +1,6 @@
 {
   "name": "@diary-spo/sql",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "sql helper",
   "main": "index.ts",
   "scripts": {
