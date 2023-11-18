@@ -5,7 +5,7 @@ import { buildValuesString, executeQuery } from './utils'
 /**
  * Создает объект для построения и выполнения SQL-запросов.
  * @param client - Клиент базы данных.
- * @returns
+ * @returns ответ из базы данных
  */
 
 const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
