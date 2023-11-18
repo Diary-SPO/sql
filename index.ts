@@ -1,3 +1,5 @@
 export * from './src/types'
 export * from './src/utils'
 export * from './src/createQueryBuilder'
+export * from './src/fetcher'
+export * from './src/crypto'

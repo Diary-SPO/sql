@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { ApiResponse, HTTPMethods } from '../types'
+import { ApiResponse, HTTPMethods } from './types'
 
 interface Params {
   url: string
