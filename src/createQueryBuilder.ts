@@ -30,9 +30,13 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
     },
 
     async first(): Promise<T | null> {
-      const result = await this.all()
+      const query = `SELECT ${this.columns.join(', ')} FROM "${
+        this.table
+      }" WHERE ${this.conditions} LIMIT 1`
 
-      if (result === null || result.length === 0) {
+      const result = await executeQuery<T>(query, client)
+
+      if (!result || result.length === 0) {
         return null
       }
 
@@ -43,13 +47,15 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
       const query = `SELECT ${this.columns.join(', ')} FROM "${
         this.table
       }" WHERE ${this.conditions} LIMIT 1`
+
       const result = await executeQuery<T>(query, client)
 
-      return result || null
+      return result ?? null
     },
 
     async delete(): Promise<void> {
       const query = `DELETE FROM "${this.table}" WHERE ${this.conditions}`
+
       await executeQuery(query, client)
     },
 
