@@ -108,10 +108,10 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
     },
 
     // TODO: сделать безопаснее
-    async customQueryRun(sql: string): Promise<T | null> {
+    async customQueryRun(sql: string): Promise<T[] | null> {
       const result = await executeQuery<T>(sql, [], client)
 
-      return result[0] ?? null
+      return result ?? null
     },
   }
 }

@@ -66,7 +66,7 @@ export interface QueryBuilder<T> {
    * @param sql - SQL-запрос.
    * @returns
    */
-  customQueryRun: (sql: string) => Promise<T | null>
+  customQueryRun: (sql: string) => Promise<T[] | null>
 }
 
 export type HTTPMethods = 'GET' | 'POST'
