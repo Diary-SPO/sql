@@ -1,6 +1,6 @@
 {
   "name": "@diary-spo/sql",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "sql helper",
   "main": "index.ts",
   "scripts": {
@@ -21,12 +21,12 @@
   },
   "homepage": "https://github.com/Diary-SPO/sql#readme",
   "dependencies": {
-    "@types/node": "^20.9.1",
     "crypto": "^1.0.1",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/pg": "^8.10.9",
+    "@types/node": "^20.9.1",
     "prettier": "^3.1.0"
   }
 }

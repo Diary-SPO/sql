@@ -36,11 +36,7 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
 
       const result = await executeQuery<T>(query, client)
 
-      if (!result || result.length === 0) {
-        return null
-      }
-
-      return result[0]
+      return result[0] ?? null
     },
 
     async all(): Promise<T[] | null> {
@@ -66,12 +62,13 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
       return `INSERT INTO ${this.table} (${columns}) VALUES (${values})`
     },
 
-    async insert(data: Partial<T>): Promise<T | null> {
+    async insert(data: Partial<T>): Promise<T[] | null> {
       const columns = `"${Object.keys(data).join('", "')}"`
       const values = buildValuesString(data)
       const query = `INSERT INTO "${this.table}" (${columns}) VALUES (${values}) RETURNING *`
 
-      return (await executeQuery<T>(query, client))[0] ?? null
+      const result = await executeQuery<T>(query, client)
+      return result ?? null
     },
 
     async buildUpdateQuery(data: Partial<T>): Promise<string> {
@@ -88,15 +85,19 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
       return `UPDATE "${this.table}" SET ${updateValues} WHERE ${this.conditions} RETURNING *`
     },
 
-    async update(data: Partial<T>): Promise<T | null> {
-      return (
-        (await executeQuery<T>(await this.buildUpdateQuery(data), client))[0] ??
-        null
+    async update(data: Partial<T>): Promise<T[]> {
+      const result = await executeQuery<T>(
+        await this.buildUpdateQuery(data),
+        client,
       )
+
+      return result ?? null
     },
 
-    async customQueryRun(sql: string): Promise<T | null> {
-      return (await executeQuery<T>(sql, client))[0] ?? null
+    async customQueryRun(sql: string): Promise<T[] | null> {
+      const result = await executeQuery<T>(sql, client)
+
+      return result ?? null
     },
   }
 }

@@ -38,14 +38,14 @@ export interface QueryBuilder<T> {
    * @param data - Данные для вставки.
    * @returns
    */
-  insert: (data: Partial<T>) => Promise<T | null>
+  insert: (data: Partial<T>) => Promise<T[] | null>
 
   /**
    * Обновляет записи, соответствующие условиям запроса, с предоставленными данными.
    * @param data - Данные для обновления.
    * @returns
    */
-  update: (data: Partial<T>) => Promise<T | null>
+  update: (data: Partial<T>) => Promise<T[] | null>
 
   /**
    * Строит SQL-запрос для вставки данных.
@@ -66,7 +66,7 @@ export interface QueryBuilder<T> {
    * @param sql - SQL-запрос.
    * @returns
    */
-  customQueryRun: (sql: string) => Promise<T | null>
+  customQueryRun: (sql: string) => Promise<T[] | null>
 }
 
 export type HTTPMethods = 'GET' | 'POST'
