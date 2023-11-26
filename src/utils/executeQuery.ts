@@ -13,7 +13,8 @@ export const executeQuery = async <T>(
 ): Promise<T[]> => {
   try {
     console.log(query)
-    const result = await client.query(query)
+    const result = await client.query<T>(query)
+
     return result.rows
   } catch (e) {
     console.error('Ошибка выполнения запроса: ', e)
