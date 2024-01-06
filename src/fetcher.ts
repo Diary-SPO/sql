@@ -26,7 +26,7 @@ export const fetcher = async <T>({
     })
 
     if (!response.ok) {
-      return 401
+      return response.status
     }
 
     return {
