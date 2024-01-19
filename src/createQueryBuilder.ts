@@ -42,7 +42,7 @@ const createQueryBuilder = <T>(client: Client): QueryBuilder<T> => {
     async all(): Promise<T[] | null> {
       const query = `SELECT ${this.columns.join(', ')} FROM "${
         this.table
-      }" WHERE ${this.conditions} LIMIT 1`
+      }" WHERE ${this.conditions}`
 
       const result = await executeQuery<T>(query, client)
 
