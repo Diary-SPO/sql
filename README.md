@@ -1,4 +1,4 @@
-#Deprecated. Own SQL Query builder
+# Deprecated. Own SQL Query builder
 
 # @diary-spo/sql
 
